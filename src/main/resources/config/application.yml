@@ -1,0 +1,106 @@
+server:
+  port: ${springBoot.server.port}
+  undertow:
+    accesslog:
+      dir: /logs/intelligent.log
+      enabled: true
+      pattern: "\"%{c,tranceId}\" \"%{i,versionCode}\" \"%{i,deviceId}\" %h %l %u %t \"%r\" %s %b \"%{i,Referer}\" \"%{i,User-Agent}\""
+  compression:
+    enabled: true
+    min-response-size: 1
+
+spring:
+
+  datasource:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: ${springBoot.mysql.url}
+      username: ${springBoot.mysql.username}
+      password: ${springBoot.mysql.password}
+  aop:
+    proxy-target-class: true
+    auto: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm
+    serialization: true
+    time-zone: GMT+0800
+
+
+mybatis:
+  mapperLocations: classpath*:mapping/*Mapper.xml
+  typeAliasesPackage: com/shanlin/intelligent/model
+  #checkConfigLocation: true
+  #configLocation: classpath:mybatis-config.xml
+  #mybatis.config：mybatis-config.xml配置文件的路径
+  #mybatis.typeHandlersPackage：扫描typeHandlers的包
+  #mybatis.checkConfigLocation：检查配置文件是否存在
+  #mybatis.executorType：设置执行模式（SIMPLE, REUSE, BATCH），默认为SIMPLE
+
+logging:
+  level:
+    root: ${springBoot.level}
+    org.springframework.amqp.rabbit: ${springBoot.level}
+    org.springframework.cloud.netflix: ${springBoot.level}
+    java.sql: ${springBoot.level}
+    java.sql.Connection: ${springBoot.level}
+    com.mysql: ${springBoot.level}
+
+
+endpoints:
+  enabled: true
+  sensitive: false
+  actuator:
+    enabled: true
+    sensitive: false
+  beans:
+    id: endpointsBean
+    sensitive: false
+  shutdown:
+    enabled: true
+
+    sensitive: false
+pagehelper:
+  #offsetAsPageNum: true
+  #rowBoundsWithCount: true
+  helperDialect: mysql
+  #dialect: com.github.pagehelper.dialect.helper.MySqlDialect
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+springBoot:
+  javaMedoly:
+    classPattern: com.shanlin.*.*
+  server:
+    port: 8083
+  mysql:
+     url: jdbc:mysql://localhost:3306/intelligent?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+     username: root
+     password: 123456
+  notcheckLoginUrl: /user/getUser,/user/getTest,/user/getUserInfoMationById
+  expireTime: 3000000
+  level: info
+  
+  
+oper:
+    expireTime: 1800000 #30分钟
+    defaultPassword: 1c63129ae9db9c60c3e8aa94d3e00495   #默认密码  1qaz2wsx
+    errorCount: 20
+
+
+feign:
+  hystrix:
+    enable: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000 #缺省为1000
+  threadpool:
+    default:
+      coreSize: 50 #缺省为10
+
+test:
+  ThridUserUrl: http://localhost:8080

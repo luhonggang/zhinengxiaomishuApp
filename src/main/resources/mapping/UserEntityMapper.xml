@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shanlin.intelligent.mapper.UserEntityMapper">
+
+	<resultMap id="BaseResultMap" type="com.shanlin.intelligent.model.UserEntity">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_no" property="userNo" jdbcType="VARCHAR" />
+		<result column="token" property="token" jdbcType="VARCHAR" />
+		<result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+		<result column="password" property="passWord" jdbcType="VARCHAR" />
+		<result column="expire_time" property="expireTime" jdbcType="BIGINT" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+		<result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!--根据UserNo获取用户-->
+	<select id="getUserByUserNo" resultMap="BaseResultMap">
+		select
+		*
+		from t_oper_user
+		where user_no = #{userNo,jdbcType=VARCHAR} 
+	</select>
+	
+	<!--根据Token获取用户-->
+	<select id="getUserByToKen" resultMap="BaseResultMap">
+		select
+		*
+		from t_oper_user
+		where token = #{token,jdbcType=VARCHAR} 
+	</select>
+	
+	<!-- 登录 -->
+	<select id="getUserBynameAndPassWord" resultMap="BaseResultMap"
+									parameterType="com.shanlin.intelligent.request.LoginRequest">
+		select 
+		*
+		from t_oper_user
+		where user_name = #{userName,jdbcType=VARCHAR} and password = #{passWord,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 获取登录用户个人信息 
+	<select id="getUserLogin" resultMap="BaseResultMap">
+		select 
+		*
+		from t_oper_user
+		where user_no = #{userNo,jdbcType=VARCHAR} 
+	</select>-->
+
+	<sql id="Base_Column_List">
+		id, user_name, token, login_time, password, created_at, created_by,
+		updated_at, updated_by
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
+		select
+		*
+		from t_oper_user
+		where id = #{id}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from t_oper_user
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	
+	<insert id="insert" parameterType="com.shanlin.intelligent.model.UserEntity">
+		insert into t_oper_user (id, user_name, token,
+		login_time, password, created_at,
+		created_by, updated_at, updated_by,expire_time,user_no
+		)
+		values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+		#{token,jdbcType=VARCHAR},
+		#{loginTime,jdbcType=TIMESTAMP}, #{passWord,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP},
+		#{createdBy,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP},
+		#{updatedBy,jdbcType=VARCHAR},#{expireTime,jdbcType=BIGINT},#{userNo,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="insertSelective" parameterType="com.shanlin.intelligent.model.UserEntity">
+		insert into t_oper_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="token != null">
+				token,
+			</if>
+			<if test="loginTime != null">
+				login_time,
+			</if>
+			<if test="passWord != null">
+				password,
+			</if>
+			<if test="createdAt != null">
+				created_at,
+			</if>
+			<if test="createdBy != null">
+				created_by,
+			</if>
+			<if test="updatedAt != null">
+				updated_at,
+			</if>
+			<if test="updatedBy != null">
+				updated_by,
+			</if>
+			<if test="expireTime != null">
+				expire_time,
+			</if>
+			<if test="userNo != null">
+				user_no,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="token != null">
+				#{token,jdbcType=VARCHAR},
+			</if>
+			<if test="loginTime != null">
+				#{loginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="passWord != null">
+				#{passWord,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				#{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdBy != null">
+				#{createdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedAt != null">
+				#{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedBy != null">
+				#{updatedBy,jdbcType=VARCHAR},
+			</if>
+			<if test="expireTime != null">
+				#{expireTime,jdbcType=BIGINT},
+			</if>
+			<if test="userNo != null">
+				#{userNo,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.shanlin.intelligent.model.UserEntity">
+		update t_oper_user
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="token != null">
+				token = #{token,jdbcType=VARCHAR},
+			</if>
+			<if test="loginTime != null">
+				login_time = #{loginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="passWord != null">
+				password = #{passWord,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				created_at = #{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdBy != null">
+				created_by = #{createdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedBy != null">
+				updated_by = #{updatedBy,jdbcType=VARCHAR},
+			</if>
+			<if test="expireTime != null">
+				expire_time = #{expireTime,jdbcType=BIGINT},
+			</if>
+			<if test="userNo != null">
+				user_no = #{userNo,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<update id="updateByPrimaryKey" parameterType="com.shanlin.intelligent.model.UserEntity">
+		update t_oper_user
+		set user_name = #{userName,jdbcType=VARCHAR},
+		token = #{token,jdbcType=VARCHAR},
+		login_time = #{loginTime,jdbcType=TIMESTAMP},
+		password = #{passWord,jdbcType=VARCHAR},
+		created_at = #{createdAt,jdbcType=TIMESTAMP},
+		created_by = #{createdBy,jdbcType=VARCHAR},
+		updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+		updated_by = #{updatedBy,jdbcType=VARCHAR},
+		expire_time= #{expireTime,jdbcType=BIGINT},
+		user_no	=#{userNo,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

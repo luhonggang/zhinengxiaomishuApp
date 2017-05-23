@@ -1,0 +1,14 @@
+*.iws
+*.ipr
+logs/*
+fileTemplates/*
+.idea/*
+.gradle/*
+src/main/generated/
+build/*
+bin/*
+*.classpath
+*.project
+.settings
+classes/*
+*.iml
